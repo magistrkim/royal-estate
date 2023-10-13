@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const Signup = () => {
   const [formData, setFormData] = useState({});
@@ -11,6 +12,7 @@ const Signup = () => {
       ...formData,
       [event.target.id]: event.target.value,
     });
+    setError(null);
   };
   const handleSubmit = async event => {
     event.preventDefault();
@@ -23,14 +25,15 @@ const Signup = () => {
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (data.success === false) {
-        setError(data.message);
+      if (!res.ok) {
+        const errorData = await res.json();
+        setError(errorData.message);
         setLoading(false);
         return;
       }
       setLoading(false);
       setError(null);
+      Notify.success('User has been successfully added!');
       navigate('/royal-estate/signin');
     } catch (error) {
       setLoading(false);
@@ -89,7 +92,7 @@ const Signup = () => {
             <span className="text-primary underline font-roboto">Sign in</span>
           </Link>
         </div>
-        {error && <p className="text-red-700 mt-5">{error}</p>}
+        {error && Notify.failure(`${error}`)}
       </div>
     </section>
   );
