@@ -19,7 +19,7 @@ const Header = () => {
             <FaSistrix className="text-primary w-[20px] h-[20px] cursor-pointer" />
           </form>
           <nav>
-            <ul className="flex items-center gap-6 max-lg:hidden">
+            <ul className="flex items-center gap-6 max-md:hidden">
               <li className="uppercase navlink">
                 <NavLink to="royal-estate/">Home</NavLink>
               </li>
@@ -30,7 +30,7 @@ const Header = () => {
                 <NavLink to="royal-estate/signin">Sign In</NavLink>
               </li>
             </ul>
-            <div className="hidden max-lg:block ml-4 ">
+            <div className="hidden max-md:block ml-4 ">
               <FaBars className="text-primary w-[24px] h-[24px] hover:text-accent cursor-pointer" />
             </div>
           </nav>

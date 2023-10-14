@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import OAuth from '../components/OAuth';
 
 const Signup = () => {
   const [formData, setFormData] = useState({});
@@ -78,13 +79,7 @@ const Signup = () => {
           >
             {loading ? 'Loading...' : 'Sign Up'}
           </button>
-          <button
-            disabled={loading}
-            className="bg-red-700 text-white rounded-md uppercase 
-          font-poppins p-3 hover:bg-red-800 disabled:opacity-60"
-          >
-            {loading ? 'Loading...' : ' Continue with Google'}
-          </button>
+          <OAuth />
         </form>
         <div className="flex gap-2 items-baseline">
           <p className="text-secondary font-roboto">Have an account?</p>

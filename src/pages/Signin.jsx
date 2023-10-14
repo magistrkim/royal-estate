@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import OAuth from '../components/OAuth';
 import { useState } from 'react';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { useDispatch, useSelector } from 'react-redux';
@@ -77,13 +78,7 @@ const Signin = () => {
           >
             {loading ? 'Loading...' : 'Sign In'}
           </button>
-          <button
-            disabled={loading}
-            className="bg-red-700 text-white rounded-md uppercase 
-          font-poppins p-3 hover:bg-red-800 disabled:opacity-60"
-          >
-            {loading ? 'Loading...' : ' Continue with Google'}
-          </button>
+          <OAuth />
         </form>
         <div className="flex gap-2 items-baseline">
           <p className="text-secondary font-roboto">
