@@ -1,7 +1,57 @@
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
+import { useRef, useState, useEffect } from 'react';
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from 'firebase/storage';
+import { app } from '../firebase.js';
+
+// firebase storage
+//       allow read;
+//       allow write: if
+//       request.resource.size < 2 * 1024 * 1024 &&
+//       request.resource.contentType.matches("image/.*")
 
 const Profile = () => {
+  const fileRef = useRef(null);
   const { currentUser } = useSelector(state => state.user);
+  const [file, setFile] = useState(undefined);
+  const [filePerc, setFilePerc] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    if (file) {
+      handleFileUpload(file);
+    }
+  }, [file]);
+
+  const handleFileUpload = file => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+      snapshot => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setFilePerc(Math.round(progress));
+      },
+      error => {
+        setFileUploadError(true);
+        console.log(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL =>
+          setFormData({ ...formData, avatar: downloadURL })
+        );
+      }
+    );
+  };
   return (
     <section className="bg-slate-100 h-screen">
       <div className="max-container padding-x py-8 max-w-lg mx-auto">
@@ -12,11 +62,34 @@ const Profile = () => {
           Profile
         </h2>
         <form onSubmit={() => {}} className="flex flex-col gap-4 mb-4">
+          <input
+            onChange={event => setFile(event.target.files[0])}
+            type="file"
+            ref={fileRef}
+            accept="image/*"
+            hidden
+          />
           <img
-            src={currentUser.avatar}
+            onClick={() => fileRef.current.click()}
+            src={formData.avatar || currentUser.avatar}
             alt="profile image"
             className="rounded-full object-cover w-24 h-24 mb-4 self-center cursor-pointer"
           />
+          <p className="text-sm self-center">
+            {fileUploadError ? (
+              <span className="text-red-700 font-poppins">
+                Error Image upload (image must be less than 2 mb)
+              </span>
+            ) : filePerc > 0 && filePerc < 100 ? (
+              <span className="text-slate-700 font-poppins">{`Uploading ${filePerc}%`}</span>
+            ) : filePerc === 100 ? (
+              <span className="text-green-700 font-poppins">
+                Image successfully uploaded!
+              </span>
+            ) : (
+              ''
+            )}
+          </p>
           <input
             type="text"
             placeholder="username"
@@ -67,6 +140,6 @@ const Profile = () => {
       </div>
     </section>
   );
-}
+};
 
-export default Profile
+export default Profile;
