@@ -1,8 +1,10 @@
 import { logo } from '../assets/icons';
 import { FaSistrix, FaBars } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
+  const { currentUser } = useSelector(state => state.user);
   return (
     <section className="bg-slate-300  shadow-md">
       <header className="max-container py-1 padding-x mx-auto">
@@ -20,15 +22,25 @@ const Header = () => {
           </form>
           <nav>
             <ul className="flex items-center gap-6 max-md:hidden">
-              <li className="uppercase navlink">
-                <NavLink to="royal-estate/">Home</NavLink>
-              </li>
-              <li className="uppercase navlink">
-                <NavLink to="royal-estate/about">About</NavLink>
-              </li>
-              <li className="uppercase navlink">
-                <NavLink to="royal-estate/signin">Sign In</NavLink>
-              </li>
+              <Link to="royal-estate/">
+                <li className="uppercase navlink">Home</li>
+              </Link>
+              <Link to="royal-estate/about">
+                <li className="uppercase navlink">About</li>
+              </Link>
+              <Link to="royal-estate/profile">
+                {currentUser ? (
+                  <img
+                    src={currentUser.avatar}
+                    alt="profile image"
+                    className="rounded-full object-cover w-10 h-10 "
+                  />
+                ) : (
+                  <li className="uppercase navlink" to="royal-estate/signin">
+                    Sign In
+                  </li>
+                )}
+              </Link>
             </ul>
             <div className="hidden max-md:block ml-4 ">
               <FaBars className="text-primary w-[24px] h-[24px] hover:text-accent cursor-pointer" />
