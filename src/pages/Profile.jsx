@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { useRef, useState, useEffect } from 'react';
 import {
   getDownloadURL,
@@ -7,7 +8,12 @@ import {
   uploadBytesResumable,
 } from 'firebase/storage';
 import { app } from '../firebase.js';
-
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from '../redux/user/userSlice.js';
+import { useDispatch } from 'react-redux';
 // firebase storage
 //       allow read;
 //       allow write: if
@@ -16,11 +22,12 @@ import { app } from '../firebase.js';
 
 const Profile = () => {
   const fileRef = useRef(null);
-  const { currentUser } = useSelector(state => state.user);
+  const { currentUser, loading, error } = useSelector(state => state.user);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (file) {
@@ -52,6 +59,32 @@ const Profile = () => {
       }
     );
   };
+  const handleChange = event => {
+    setFormData({ ...formData, [event.target.id]: event.target.value });
+  };
+  const handleSubmit = async event => {
+    event.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const errorData = await res.json();
+        dispatch(updateUserFailure(errorData.message));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+      Notify.success('User is updated successfully!');
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
+  };
   return (
     <section className="bg-slate-100 h-screen">
       <div className="max-container padding-x py-8 max-w-lg mx-auto">
@@ -61,7 +94,7 @@ const Profile = () => {
         >
           Profile
         </h2>
-        <form onSubmit={() => {}} className="flex flex-col gap-4 mb-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-4">
           <input
             onChange={event => setFile(event.target.files[0])}
             type="file"
@@ -93,30 +126,32 @@ const Profile = () => {
           <input
             type="text"
             placeholder="username"
+            defaultValue={currentUser.username}
             className="border p-3 rounded-md outline-none info-text"
             id="username"
-            onChange={() => {}}
+            onChange={handleChange}
           />
           <input
             type="email"
             placeholder="email"
+            defaultValue={currentUser.email}
             className="border p-3 rounded-md outline-none info-text"
             id="email"
-            onChange={() => {}}
+            onChange={handleChange}
           />
           <input
             type="password"
             placeholder="password"
             className="border p-3 rounded-md outline-none info-text"
             id="password"
-            onChange={() => {}}
+            onChange={handleChange}
           />
           <button
+            disabled={loading}
             className="bg-slate-800 text-white rounded-md uppercase 
           font-poppins p-3 hover:bg-primary disabled:opacity-60"
           >
-            Update
-            {/* {loading ? 'Loading...' : 'Sign Up'} */}
+            {loading ? 'Loading...' : ' Update'}
           </button>
           <button
             className="bg-green-700 text-white rounded-md uppercase 
@@ -135,8 +170,7 @@ const Profile = () => {
         <p className="text-green-700 font-roboto text-center cursor-pointer">
           Show adverts
         </p>
-
-        {/* {error && Notify.failure(`${error}`)} */}
+        {error ? Notify.failure(`${error}`) : ''}
       </div>
     </section>
   );
