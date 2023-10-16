@@ -12,6 +12,9 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from '../redux/user/userSlice.js';
 import { useDispatch } from 'react-redux';
 // firebase storage
@@ -75,14 +78,30 @@ const Profile = () => {
       });
       const data = await res.json();
       if (!res.ok) {
-        const errorData = await res.json();
-        dispatch(updateUserFailure(errorData.message));
+        dispatch(updateUserFailure(data.message));
         return;
       }
       dispatch(updateUserSuccess(data));
       Notify.success('User is updated successfully!');
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+    }
+  };
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+      Notify.success('User is deleted successfully!');
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
     }
   };
   return (
@@ -162,7 +181,10 @@ const Profile = () => {
           </button>
         </form>
         <div className="flex justify-between items-baseline mb-4">
-          <p className="text-red-600 font-roboto cursor-pointer">
+          <p
+            className="text-red-600 font-roboto cursor-pointer"
+            onClick={handleDeleteUser}
+          >
             Delete account
           </p>
           <p className="text-red-600 font-roboto cursor-pointer">Sign out</p>
