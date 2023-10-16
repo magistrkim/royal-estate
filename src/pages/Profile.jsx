@@ -15,6 +15,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutStart,
+  signOutSuccess,
+  signOutFailure,
 } from '../redux/user/userSlice.js';
 import { useDispatch } from 'react-redux';
 // firebase storage
@@ -104,6 +107,20 @@ const Profile = () => {
       dispatch(deleteUserFailure(error.message));
     }
   };
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart());
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(signOutFailure(data.message));
+        return;
+      }
+      dispatch(signOutSuccess(data));
+    } catch (error) {
+      dispatch(signOutFailure(error.message));
+    }
+  };
   return (
     <section className="bg-slate-100 h-screen">
       <div className="max-container padding-x py-8 max-w-lg mx-auto">
@@ -187,7 +204,12 @@ const Profile = () => {
           >
             Delete account
           </p>
-          <p className="text-red-600 font-roboto cursor-pointer">Sign out</p>
+          <p
+            className="text-red-600 font-roboto cursor-pointer"
+            onClick={handleSignOut}
+          >
+            Sign out
+          </p>
         </div>
         <p className="text-green-700 font-roboto text-center cursor-pointer">
           Show adverts
