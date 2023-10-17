@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import Loader from './components/Loader';
+import CreateListing from './pages/CreateListing';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="royal-estate/about" element={<About />} />
           <Route element={<PrivateRoute />}>
             <Route path="royal-estate/profile" element={<Profile />} />
+            <Route path="/create-listing" element={<CreateListing />} />
           </Route>
           <Route path="royal-estate/signin" element={<Signin />} />
           <Route path="royal-estate/signup" element={<Signup />} />

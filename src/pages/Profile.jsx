@@ -20,6 +20,7 @@ import {
   signOutFailure,
 } from '../redux/user/userSlice.js';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 // firebase storage
 //       allow read;
 //       allow write: if
@@ -189,13 +190,13 @@ const Profile = () => {
           >
             {loading ? 'Loading...' : ' Update'}
           </button>
-          <button
-            className="bg-green-700 text-white rounded-md uppercase 
+          <Link
+            to={"/create-listing"}
+            className="bg-green-700 text-white text-center rounded-md uppercase 
           font-poppins p-3 hover:bg-green-900 disabled:opacity-60"
           >
-            Create Listening
-            {/* {loading ? 'Loading...' : 'Sign Up'} */}
-          </button>
+            {loading ? 'Loading...' : 'Create Listening'}
+          </Link>
         </form>
         <div className="flex justify-between items-baseline mb-4">
           <p
