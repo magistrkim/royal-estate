@@ -34,6 +34,8 @@ const Profile = () => {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -122,8 +124,22 @@ const Profile = () => {
       dispatch(signOutFailure(error.message));
     }
   };
+  const handleShowListings = async () => {
+    try {
+      setShowListingsError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (!res.ok) {
+        setShowListingsError(true);
+        return;
+      }
+      setUserListings(data);
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  };
   return (
-    <section className="bg-slate-100 h-screen">
+    <section className="bg-slate-100 ">
       <div className="max-container padding-x py-8 max-w-lg mx-auto">
         <h2
           className="text-3xl text-center text-secondary font-semibold 
@@ -191,7 +207,7 @@ const Profile = () => {
             {loading ? 'Loading...' : ' Update'}
           </button>
           <Link
-            to={"/create-listing"}
+            to={'/create-listing'}
             className="bg-green-700 text-white text-center rounded-md uppercase 
           font-poppins p-3 hover:bg-green-900 disabled:opacity-60"
           >
@@ -212,10 +228,54 @@ const Profile = () => {
             Sign out
           </p>
         </div>
-        <p className="text-green-700 font-roboto text-center cursor-pointer">
+        <button
+          onClick={handleShowListings}
+          className="text-green-700 font-roboto w-full"
+        >
           Show adverts
+        </button>
+        <p className="text-red-700 mt-5">
+          {showListingsError ? 'Showing listings error' : ''}
         </p>
         {error ? Notify.failure(`${error}`) : ''}
+        {userListings && userListings.length > 0 && (
+          <div className='flex flex-col gap-4'>
+            {userListings.map(listing => (
+              <div
+                key={listing._id}
+                className="flex justify-between p-3 border border-gray-300 items-center
+              gap-4 rounded-md"
+              >
+                <Link to={`/listing/${listing._id}`}>
+                  <img
+                    src={listing.imageUrls[0]}
+                    alt="listing cover"
+                    className="w-24 h-16 object-contain"
+                  />
+                </Link>
+                <Link className="flex-1" to={`/listing/${listing._id}`}>
+                  <p className="font-poppins text-primary font-semibold hover:text-green-700 truncate">
+                    {listing.name}
+                  </p>
+                </Link>
+                <div className="flex flex-col gap-2">
+                  <button
+                    className="text-red-700  uppercase 
+          font-poppins p-1  hover:opacity-40"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="text-primary uppercase 
+          font-poppins p-1 hover:opacity-40"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
