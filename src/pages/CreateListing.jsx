@@ -143,7 +143,8 @@ const CreateListing = () => {
       if (!res.ok) {
         setError(data.message);
       }
-      navigate(`royal-estate/listing/${data._id}`);
+      navigate(`/listing/${data._id}`);
+      console.log(data)
     } catch (error) {
       setError(error.message);
       setLoading(false);

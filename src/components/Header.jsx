@@ -22,13 +22,13 @@ const Header = () => {
           </form>
           <nav>
             <ul className="flex items-center gap-6 max-md:hidden">
-              <Link to="royal-estate/">
+              <Link to="/">
                 <li className="uppercase navlink">Home</li>
               </Link>
-              <Link to="royal-estate/about">
+              <Link to="/about">
                 <li className="uppercase navlink">About</li>
               </Link>
-              <Link to="royal-estate/profile">
+              <Link to="/profile">
                 {currentUser ? (
                   <img
                     src={currentUser.avatar}
@@ -36,7 +36,7 @@ const Header = () => {
                     className="rounded-full object-cover w-10 h-10 "
                   />
                 ) : (
-                  <li className="uppercase navlink" to="royal-estate/signin">
+                  <li className="uppercase navlink" to="/signin">
                     Sign In
                   </li>
                 )}

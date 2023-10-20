@@ -42,7 +42,7 @@ const Signin = () => {
       }
       dispatch(signInSuccess(data));
       Notify.success('Welcome!');
-      navigate('/royal-estate/');
+      navigate('/');
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
@@ -84,7 +84,7 @@ const Signin = () => {
           <p className="text-secondary font-roboto">
             Do not have an account yet?
           </p>
-          <Link to={'/royal-estate/signup'}>
+          <Link to={'/signup'}>
             <span className="text-primary underline font-roboto">Sign up</span>
           </Link>
         </div>

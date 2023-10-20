@@ -17,14 +17,17 @@ const App = () => {
       <Header />
       <Suspense fallback={<Loader />}>
         <Routes>
-          <Route path="royal-estate/" element={<Home />} />
-          <Route path="royal-estate/about" element={<About />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route element={<PrivateRoute />}>
-            <Route path="royal-estate/profile" element={<Profile />} />
-            <Route path="/create-listing" element={<CreateListing />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/create-listing"
+              element={<CreateListing />}
+            />
           </Route>
-          <Route path="royal-estate/signin" element={<Signin />} />
-          <Route path="royal-estate/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Suspense>
       <Footer />

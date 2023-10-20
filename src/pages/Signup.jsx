@@ -35,7 +35,7 @@ const Signup = () => {
       setLoading(false);
       setError(null);
       Notify.success('User has been successfully added!');
-      navigate('/royal-estate/signin');
+      navigate('/signin');
     } catch (error) {
       setLoading(false);
       setError(error.message);

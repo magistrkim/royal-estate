@@ -240,7 +240,7 @@ const Profile = () => {
         {error ? Notify.failure(`${error}`) : ''}
         {userListings && userListings.length > 0 && (
           <div className='flex flex-col gap-4'>
-            {userListings.map(listing => (
+            {userListings.map((listing) => (
               <div
                 key={listing._id}
                 className="flex justify-between p-3 border border-gray-300 items-center
