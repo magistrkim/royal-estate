@@ -138,6 +138,23 @@ const Profile = () => {
       setShowListingsError(true);
     }
   };
+  const handleDeleteListing = async listingId => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+        return;
+      }
+      setUserListings(prev =>
+        prev.filter(listing => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <section className="bg-slate-100 ">
       <div className="max-container padding-x py-8 max-w-lg mx-auto">
@@ -239,8 +256,8 @@ const Profile = () => {
         </p>
         {error ? Notify.failure(`${error}`) : ''}
         {userListings && userListings.length > 0 && (
-          <div className='flex flex-col gap-4'>
-            {userListings.map((listing) => (
+          <div className="flex flex-col gap-4">
+            {userListings.map(listing => (
               <div
                 key={listing._id}
                 className="flex justify-between p-3 border border-gray-300 items-center
@@ -260,6 +277,7 @@ const Profile = () => {
                 </Link>
                 <div className="flex flex-col gap-2">
                   <button
+                    onClick={() => handleDeleteListing(listing._id)}
                     className="text-red-700  uppercase 
           font-poppins p-1  hover:opacity-40"
                   >
