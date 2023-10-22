@@ -5,7 +5,7 @@ const Footer = () => {
     <section className="bg-[#062C4F]">
       <footer className="max-container padding-x py-8">
         <div
-          className="flex justify-between items-start flex-wrap gap-20
+          className="flex justify-between items-start flex-wrap gap-4
       max-lg:flex-col"
         >
           <div className="flex flex-col items-start ">
