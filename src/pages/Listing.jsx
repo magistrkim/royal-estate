@@ -4,6 +4,7 @@ import Loader from '../components/Loader';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { Navigation } from 'swiper/modules';
+import { useSelector } from 'react-redux';
 import 'swiper/css/bundle';
 import {
   FaBath,
@@ -13,6 +14,7 @@ import {
   FaParking,
   FaShare,
 } from 'react-icons/fa';
+import Contacts from '../components/Contacts';
 
 const Listing = () => {
   SwiperCore.use([Navigation]);
@@ -20,7 +22,9 @@ const Listing = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contacts, setContacts] = useState(false);
   const params = useParams();
+  const { currentUser } = useSelector(state => state.user);
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -117,7 +121,7 @@ const Listing = () => {
               {listing.description}
             </p>
             <ul
-              className="text-green-800 font-semibold font-roboto flex
+              className="text-green-800 mb-2 font-semibold font-roboto flex
             flex-wrap items-center gap-4 sm:gap-6"
             >
               <li className="flex items-center gap-1 whitespace-nowrap">
@@ -141,6 +145,18 @@ const Listing = () => {
                 {listing.furnished ? 'Fully equiped' : 'Unfurnished'}
               </li>
             </ul>
+            {currentUser &&
+              listing.userRef !== currentUser._id &&
+              !contacts && (
+                <button
+                  onClick={() => setContacts(true)}
+                  className="bg-slate-800 text-white rounded-md uppercase 
+          font-poppins p-3 hover:bg-primary disabled:opacity-60"
+                >
+                  Contact landlord
+                </button>
+              )}
+            {contacts && <Contacts listing={listing} />}
           </div>
         </div>
       )}
