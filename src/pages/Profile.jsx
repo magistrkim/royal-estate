@@ -271,7 +271,7 @@ const Profile = () => {
                   />
                 </Link>
                 <Link className="flex-1" to={`/listing/${listing._id}`}>
-                  <p className="font-poppins text-primary font-semibold hover:text-green-700 truncate">
+                  <p className="font-poppins text-primary font-semibold hover:text-green-700">
                     {listing.name}
                   </p>
                 </Link>
