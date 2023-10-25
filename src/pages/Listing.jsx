@@ -142,7 +142,7 @@ const Listing = () => {
               </li>
               <li className="flex items-center gap-1 whitespace-nowrap">
                 <FaChair className="text-xl" />
-                {listing.furnished ? 'Fully equiped' : 'Unfurnished'}
+                {listing.furnished ? 'Fully equipped' : 'Unfurnished'}
               </li>
             </ul>
             {currentUser &&
