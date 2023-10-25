@@ -11,7 +11,19 @@
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
-
+.violet-gradient {
+  background: #062c4f;
+  background: linear-gradient(
+    -90deg,
+    #062c4f 0%,
+    rgba(25, 47, 71, 0.6) 100%
+  );
+  background: -webkit-linear-gradient(
+    -90deg,
+    #062c4f 0%,
+    rgba(25, 47, 71, 0.6) 100%
+  );
+}
 @layer components {
   .max-container {
     max-width: 1200px;

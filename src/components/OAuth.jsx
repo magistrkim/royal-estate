@@ -29,7 +29,7 @@ const OAuth = () => {
       const data = await res.json();
       dispatch(signInSuccess(data));
       Notify.success('Welcome!');
-      navigate('/royal-estate/');
+      navigate('/');
     } catch (error) {
       Notify.failure('could not sign in with Google');
       console.log('could not sign in with Google', error);

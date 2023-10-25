@@ -48,8 +48,8 @@ const Signin = () => {
     }
   };
   return (
-    <section className="bg-slate-100 h-screen">
-      <div className="max-container padding-x py-8 max-w-lg mx-auto">
+    <section className="bg-slate-100 py-20">
+      <div className="max-container padding-x max-w-lg mx-auto">
         <h2
           className="text-3xl text-center text-secondary font-semibold 
         mb-4 font-roboto uppercase"

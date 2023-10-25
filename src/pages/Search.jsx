@@ -125,7 +125,7 @@ const Search = () => {
   return (
     <section className="bg-slate-100">
       <div className="max-container padding-x py-8 flex flex-col md:flex-row">
-        <div className="py-7 pr-7 max-md:border-b-2 md:border-r-2 md:min-h-screen md:min-w-[360px]">
+        <div className="py-7 md:pr-7 max-md:border-b-2 md:border-r-2 md:min-h-screen md:min-w-[360px]">
           <form onSubmit={handleSubmit} className="flex flex-col gap-8">
             <div className="flex items-center gap-2">
               <label className="whitespace-nowrap font-roboto text-primary text-lg font-semibold">
@@ -234,14 +234,14 @@ const Search = () => {
             </button>
           </form>
         </div>
-        <div className="p-7">
+        <div className="p-7 w-full">
           <h2
             className="text-3xl text-secondary font-semibold 
         mb-4 font-roboto uppercase max-sm:text-center"
           >
             Listing results:
           </h2>
-          <div className="flex flex-row flex-wrap gap-6">
+          <div className="flex flex-row flex-wrap gap-6 max-md:justify-center">
             {!loading && listings.length === 0 && (
               <p className="text-red-700 mt-5 font-roboto font-semibold text-lg">
                 No listing found!
