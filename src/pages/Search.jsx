@@ -14,6 +14,7 @@ const Search = () => {
   });
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
+  const [showMore, setShowMore] = useState(false);
 
   const navigate = useNavigate();
   const handleChange = event => {
@@ -59,6 +60,7 @@ const Search = () => {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get('searchTerm');
@@ -91,14 +93,34 @@ const Search = () => {
 
     const fetchListings = async () => {
       setLoading(true);
+      setShowMore(false);
       const searchQuery = urlParams.toString();
       const res = await fetch(`/api/listing/get?${searchQuery}`);
       const data = await res.json();
+      if (data.length > 5) {
+        setShowMore(true);
+      } else {
+        setShowMore(false);
+      }
       setListings(data);
       setLoading(false);
     };
     fetchListings();
   }, [location.search]);
+
+  const onShowMoreClick = async () => {
+    const numberOfListings = listings.length;
+    const startListingsIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startListingsIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await res.json();
+    if (data.length < 6) {
+      setShowMore(false);
+    }
+    setListings([...listings, ...data]);
+  };
 
   return (
     <section className="bg-slate-100">
@@ -231,6 +253,16 @@ const Search = () => {
               listings.map(listing => (
                 <ListingCard key={listing._id} listing={listing} />
               ))}
+            {showMore && (
+              <button
+                onClick={onShowMoreClick}
+                className="bg-green-900 w-full max-w-[200px] m-auto hover:bg-green-700
+                 text-white text-center p-1 rounded-md font-roboto"
+              >
+                {' '}
+                Show more
+              </button>
+            )}
           </div>
         </div>
       </div>
